@@ -1,0 +1,61 @@
+{% extends "basic_quiz_template.html" %}
+
+{% block title %}Игра Викторина - Главная{% endblock %}
+
+{% block navitemlist %}
+<li class="active"><a href="/">Home</a></li>
+<li><a href="#">About</a></li>
+<li><a href="#">Projects</a></li>
+<li><a href="#">Contact</a></li>
+<li><a href="/topics">Все темы</a></li>
+<li><a href="/onequestion">Случайный вопрос</a></li>
+{% endblock %}
+
+
+{%block sidelinks %}
+<p><a href="http://python.org">Язык Python</a></p>
+<p><a href="https://www.w3schools.com/bootstrap/bootstrap_forms.asp">Библиотека Bootstrap</a></p>
+<p><a href="http://flask.pocoo.org/">Модуль Flask</a></p>
+{% endblock %}
+
+{% block mainblock %}
+<h2>Добро пожаловать в игру "Викторина"</h2>
+<p style="font-size: large; margin-bottom: 50px">Вашему вниманию будут предложены разные вопросы из разных тематических облаcтей</p>
+<p style="font-size: large; margin-bottom: 50px">Слово «викторина» появилось в 1928-х г. в журнале «Огонек». Известный советский журналист и писатель
+    Михаил Кольцов так озаглавил подборки, включающие в себя вопросы, шарады, ребусы и т.п.
+    Готовил эту развлекательную полосу некто Виктор Микулин, сотрудник журнала.
+    От имени Виктор и последних букв фамилии и сложилось слово «викторина».
+
+Впоследствии нашли связь этого слова со словом «победа». Виктор — лат. победитель</p>
+<p style="font-size: large; margin-bottom: 50px">Исторически викторины применяются в качестве развлекательного времяпровождения соревновательного плана.
+    C 1975 года викторины используются как игры в телевизионных программах для соревнований и получения призов.
+    Также викторины повсеместно применяются для развлечений рекламного характера для привлечения аудитории товаров или событий.
+    Кроме того, существуют примеры (IQ-тесты, обучающие викторины) использованияответов игроков для оценки знаний,
+    исходя из сложности вопросов, скорости ответов, тематик и прочих направлений. </p>
+<p style="font-size: large; margin-bottom: 50px">С появлением Интернета стало возможным создавать специализированные сайты-викторины, позволив викторине проходить в режиме реального времени. На некоторых из них предусмотрены денежные призы для победителей.
+
+Помимо викторин-сайтов можно поиграть онлайн и в jabber-чатах. Например с ботом Quizer (викторина@conference.jabber.ru)
+
+Многие тематические сайты размещают странички с викторинами, призванные развлекать посетителей и популяризовать направленность сайта. Участие в этих викторинах обычно бесплатное, а среди правильно ответивших могут разыгрываться призы.
+
+С расцветом эры смартфонов, викторина стала доступна и там, позволяя играть в любом месте и в любое время.</p>
+<p style="font-size: large; margin-bottom: 50px">The first attested use of the word is from 1781[1] and means an odd person. This sense survives today in the word quizzical. It was also used in the term quizzing glass, a common accoutrement of British Regency dandies. It later acquired a meaning of to make fun of, or to mock. How it acquired its current meaning of a test is unknown, but that sense did not appear until 1867 and then it was in the United States.[citation needed]
+
+The Oxford English Dictionary attests the use of the verb quiz to mean "to question or interrogate", with a reference from 1843: "She com back an' quiesed us", which could be a clue to its origin. Quiz as a test could be a corruption of the Latin qui es, meaning "Who are you?" The American Heritage Dictionary says it may be from the English dialect verb quiset, meaning "to question". In any case it is probably from the same root as question and inquisitive.[citation needed]
+
+There is a well-known myth about the word quiz that says that in 1791 a Dublin theater owner named James Daly made a bet that he could introduce a word into the language within twenty-four hours. He then went out and hired a group of street urchins to write the word "quiz", which was a nonsense word, on walls around the city of Dublin. Within a day, the word was common currency and had acquired a meaning (since no one knew what it meant, everyone thought it was some sort of test) and Daly had some extra cash in his pocket.[2]
+    However, there is no evidence to support the story, and the term was already in use before the alleged bet in 1791.</p>
+{% endblock %}
+
+{% block sideads %}
+<div class="well">
+    <p>{{ads[0] | safe}}</p>
+</div>
+<div class="well">
+    <p>{{ads[1] | safe}}</p>
+</div>
+{% endblock %}
+
+{% block footerblock %}
+<p>{{FooterText}}</p>
+{% endblock %}

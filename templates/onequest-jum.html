@@ -1,0 +1,52 @@
+{% extends "basic_quiz_template.html" %}
+
+{% block title %}{{topic}}{% endblock %}
+
+{% block navitemlist %}
+<li><a href="/">Home</a></li>
+<li><a href="#">About</a></li>
+<li><a href="#">Projects</a></li>
+<li><a href="#">Contact</a></li>
+<li><a href="/topics">Все темы</a></li>
+<li class="active"><a href="/onequestion">Случайный вопрос</a></li>
+{% endblock %}
+
+
+{%block sidelinks %}
+<p><a href="http://python.org">Язык Python</a></p>
+<p><a href="https://www.w3schools.com/bootstrap/bootstrap_forms.asp">Библиотека Bootstrap</a></p>
+<p><a href="http://flask.pocoo.org/">Модуль Flask</a></p>
+{% endblock %}
+
+{% block mainblock %}
+<div class="row">
+     <div class="jumbotron">
+<h2>{{question}}</h2>
+<p>Выберите один из приведенных вариантов ответа:</p>
+<br>
+     </div>
+<form>
+ <ul style="list-style-type: none">
+    {% for opt in options%}
+    <li><div class="well well-sm">
+        <div class="radio">
+            <label><input type="radio" name="optradio" value={{loop.index}} {% if loop.first %} checked {% endif %}>   {{opt}}</label></div></div></li>
+    {% endfor %}
+</ul>
+    <button type="submit" class="btn-lg btn-primary">Ваш ответ</button>
+</form>
+</div>
+{% endblock %}
+
+{% block sideads %}
+<div class="well">
+    <p>{{ads[0] | safe}}</p>
+</div>
+<div class="well">
+    <p>{{ads[1] | safe}}</p>
+</div>
+{% endblock %}
+
+{% block footerblock %}
+<p class="text-muted">{{FooterText}}</p>
+{% endblock %}

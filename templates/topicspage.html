@@ -1,0 +1,43 @@
+{% extends "basic_quiz_template.html" %}
+
+{% block title %}Игра Викторина - Все темы{% endblock %}
+
+{% block navitemlist %}
+<li><a href="/">Home</a></li>
+<li><a href="#">About</a></li>
+<li><a href="#">Projects</a></li>
+<li><a href="#">Contact</a></li>
+<li class="active"><a href="/topics">Все темы</a></li>
+<li><a href="/onequestion">Случайный вопрос</a></li>
+{% endblock %}
+
+
+{%block sidelinks %}
+<p><a href="http://python.org">Язык Python</a></p>
+<p><a href="https://www.w3schools.com/bootstrap/bootstrap_forms.asp">Библиотека Bootstrap</a></p>
+<p><a href="http://flask.pocoo.org/">Модуль Flask</a></p>
+{% endblock %}
+
+{% block mainblock %}
+<h2>Добро пожаловать в игру "Викторина"</h2>
+<p>В базе имеются вопросы по следующим темам</p>
+<br>
+<ul>
+    {% for name in quest_list%}
+    <li>{{name}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block sideads %}
+<div class="well">
+    <p>{{ads[0] | safe}}</p>
+</div>
+<div class="well">
+    <p>{{ads[1] | safe}}</p>
+</div>
+{% endblock %}
+
+{% block footerblock %}
+<p>{{FooterText}}</p>
+{% endblock %}
