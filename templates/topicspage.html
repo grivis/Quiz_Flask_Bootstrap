@@ -19,14 +19,50 @@
 {% endblock %}
 
 {% block mainblock %}
+<div class="row">
+     <div class="jumbotron">
 <h2>Добро пожаловать в игру "Викторина"</h2>
 <p>В базе имеются вопросы по следующим темам</p>
-<br>
-<ul>
+     </div>
+</div>
+
+
+<form>
+ <ul style="list-style-type: none">
     {% for name in quest_list%}
-    <li>{{name}}</li>
+    <li><div class="well well-sm">
+        <div class="radio">
+ <label><input type="radio" name="optradio" value={{loop.index}} {% if loop.first %} checked {% endif %}>   {{name[0]}} <span class="badge">{{name[1]}}</span></label></div></div></li>
     {% endfor %}
 </ul>
+    <button type="submit" class="btn-lg btn-primary">Выбрать тему</button>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}
 
 {% block sideads %}
