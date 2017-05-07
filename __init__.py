@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, make_response
 import glob
 import random
 import time, datetime
@@ -7,17 +7,26 @@ app = Flask(__name__)
 
 ads = ['Bootstrap - отличный пакет для быстрой разработки сайтов',
        'Bootstrap хорошо работает совместно с Flask']
-FooterText = 'Наш проект разработки на Flask и Bootstrap'
-topic_selected = None
+FooterText = 'Неавторизованный пользователь'
+#topic_selected = None
 topicdic = {}
+flag_topicdic = False
 
 @app.route('/')
 def mainpage():
+    uid = request.cookies.get('userID')
+    lname = request.cookies.get('lName')
+    fname = request.cookies.get('fName')
+    if uid or lname or fname:
+        FooterText = 'Пользователь: {}, {} {}'.format(uid, lname, fname)
+    else:
+        FooterText = 'Неавторизованный пользователь'
+
     return render_template('rootpage.html', ads=ads, FooterText=FooterText)
 
 @app.route('/topics')
 def topics():
-    global topic_selected, topicdic
+    global topicdic, flag_topicdic
     '''
 {'Животные':['trivia2.txt', 'trivia5.txt']}
 
@@ -29,15 +38,25 @@ def topics():
         f.close()
     quest_list = list(quest_set)
     '''
-    for file in glob.glob('./static/trivia*.txt'):
-        f = open(file, "r", encoding="utf-8")
-        topic = f.readline().replace("\n", "")
-        if not topicdic.get(topic):
-            topicdic[topic] = [file]
-        else:
-            flist = topicdic[topic]
-            flist.append(file)
-            topicdic[topic] = flist
+    uid = request.cookies.get('userID')
+    lname = request.cookies.get('lName')
+    fname = request.cookies.get('fName')
+    if uid or lname or fname:
+        FooterText = 'Пользователь: {}, {} {}'.format(uid, lname, fname)
+    else:
+        FooterText = 'Неавторизованный пользователь'
+
+    if not flag_topicdic:
+        for file in glob.glob('/var/www/QuizApp/QuizApp/static/trivia*.txt'):
+            f = open(file, "r", encoding="utf-8")
+            topic = f.readline().replace("\n", "")
+            if not topicdic.get(topic):
+                topicdic[topic] = [file]
+            else:
+                flist = topicdic[topic]
+                flist.append(file)
+                topicdic[topic] = flist
+        flag_topicdic = True
     #print(topicdic)
     quest_list = [(item, len(topicdic[item])) for item in sorted(topicdic.keys())]
 
@@ -49,23 +68,34 @@ def topics():
     if request.args:
         opt = request.args['optradio']
         topic_selected = quest_list[int(opt)-1][0]
-        return redirect('/selected')
+        resp = make_response(redirect('/selected'))
+        resp.set_cookie('TopicSelected', topic_selected, max_age=30)
+        return resp
 
 
     return render_template('topicspage.html', quest_list=quest_list, ads=ads, FooterText=FooterText)
 
 @app.route('/selected')
 def selected():
-    global topicdic, topic_selected
+    global topicdic
+    uid = request.cookies.get('userID')
+    lname = request.cookies.get('lName')
+    fname = request.cookies.get('fName')
+    if uid or lname or fname:
+        FooterText = 'Пользователь: {}, {} {}'.format(uid, lname, fname)
+    else:
+        FooterText = 'Неавторизованный пользователь'
+    topic_selected = request.cookies.get('TopicSelected')
     files = topicdic[topic_selected]
 
     '''Получить количество минут в данный момент'''
     t = datetime.datetime.now()
     minnow = t.timetuple().tm_min
     order = minnow % len(files)
+    #order = minnow % 5
     # print('Minutes', minnow)
     file = (files[order])
-    # print(file)
+    #print(files)
     f = open(file, "r", encoding="utf-8")
     topic = f.readline()
     question = f.readline()
@@ -94,8 +124,15 @@ def selected():
 
 @app.route('/onequestion')
 def onequestion():
-    files = glob.glob('./static/trivia*.txt')
+    files = glob.glob('/var/www/QuizApp/QuizApp/static/trivia*.txt')
     '''Получить количество минут в данный момент'''
+    uid = request.cookies.get('userID')
+    lname = request.cookies.get('lName')
+    fname = request.cookies.get('fName')
+    if uid or lname or fname:
+        FooterText = 'Пользователь: {}, {} {}'.format(uid, lname, fname)
+    else:
+        FooterText = 'Неавторизованный пользователь'
     t = datetime.datetime.now()
     minnow = t.timetuple().tm_min
     order = minnow%len(files)
@@ -121,10 +158,20 @@ def onequestion():
 
     return render_template('onequest-jum.html', topic=topic, question=question, options=options, ads=ads, FooterText=FooterText)
 
+@app.route('/user/')
+def login():
+    uid = request.args.get('uid')
+    first_name = request.args.get('first_name')
+    last_name = request.args.get('last_name')
+    FooterText = 'Пользователь: {}, {} {}'.format(uid, last_name, first_name)
+    resp = make_response(render_template('rootpage.html', ads=ads, FooterText=FooterText))
+    resp.set_cookie('userID', uid, max_age=24*60*60)
+    resp.set_cookie('fName', first_name, max_age=24*60*60)
+    resp.set_cookie('lName', last_name, max_age=24*60*60)
+    return resp
+    #render_template('rootpage.html', ads=ads, FooterText=FooterText)
 
 
 
-
-
-
-app.run()
+if __name__ == '__main__':
+    app.run(debug=True)
