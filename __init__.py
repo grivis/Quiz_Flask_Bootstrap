@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, make_response
+from flask import Flask, render_template, request, redirect, make_response, session
 import glob
 import random
-import time, datetime
+import time, datetime, os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(16)
 
 ads = ['Bootstrap - отличный пакет для быстрой разработки сайтов',
        'Bootstrap хорошо работает совместно с Flask']
@@ -164,10 +165,23 @@ def login():
     first_name = request.args.get('first_name')
     last_name = request.args.get('last_name')
     FooterText = 'Пользователь: {}, {} {}'.format(uid, last_name, first_name)
+    session['uid'] = uid
+    session['fname'] = first_name
+    session['lname'] = last_name
+    for file in glob.glob('/var/www/QuizApp/QuizApp/static/trivia*.txt'):
+        f = open(file, "r", encoding="utf-8")
+        topic = f.readline().replace("\n", "")
+        if not topicdic.get(topic):
+            topicdic[topic] = [file]
+        else:
+            flist = topicdic[topic]
+            flist.append(file)
+            topicdic[topic] = flist
+    session['topicdic'] = topicdic
     resp = make_response(render_template('rootpage.html', ads=ads, FooterText=FooterText))
     resp.set_cookie('userID', uid, max_age=24*60*60)
-    resp.set_cookie('fName', first_name, max_age=24*60*60)
-    resp.set_cookie('lName', last_name, max_age=24*60*60)
+    resp.set_cookie('fName', first_name, max_age=24 * 60 * 60)
+    resp.set_cookie('lName', last_name, max_age=24 * 60 * 60)
     return resp
     #render_template('rootpage.html', ads=ads, FooterText=FooterText)
 
